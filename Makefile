@@ -1,18 +1,26 @@
-LDFLAGS = -framework OpenGL -lglfw3 -I/usr/local/Cellar/glfw3/3.1/include -lGLEW -I/usr/local/Cellar/glew/1.11.0/include
+# You should install via homebrew : 
+# 	brew install glew
+# 	brew install glfw3
 
-all: program
+INCLUDE=-I/usr/local/Cellar/glew/1.11.0/include -I/usr/local/Cellar/glfw3/3.1/include
 
-program: ./src/InitShader.o ./src/LoadBMP.o ./src/main.o 
-	g++ ./src/InitShader.o ./src/LoadBMP.o ./src/main.o -o program $(LDFLAGS)
+LDFLAGS=-framework OpenGL
+LGFLAGS+=-L/usr/local/Cellar/glew/1.11.0/lib -L/usr/local/Cellar/glfw3/3.1/lib
+LDFLAGS+=-lglew -lglfw3
 
-main.o: ./src/main.cpp
-	g++ $(LDFLAGS) -c ./src/main.cpp
+SOURCES=$(wildcard src/*.cpp)
+OBJECTS=$(SOURCES:.cpp=.o)
 
-InitShader.o: ./src/InitShader.cpp
-	g++ $(LDFLAGS) -c ./src/InitShader.cpp
+EXECUTABLE=program
 
-LoadBMP.o: ./src/LoadBMP.o
-	g++ $(LDFLAGS) -c ./src/LoadBMP.o
+src/%.o: src/%.cpp
+	g++ -c -o src/$*.o src/$*.cpp $(INCLUDE)
+
+$(EXECUTABLE): $(OBJECTS)
+	g++ $(LDFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+
+all: $(EXECUTABLE)
 
 clean:
-	rm ./src/*o program
+	rm -f $(EXECUTABLE)
+	rm -f $(OBJECTS)
