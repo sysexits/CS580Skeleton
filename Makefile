@@ -2,11 +2,10 @@
 # 	brew install glew
 # 	brew install glfw3
 
-INCLUDE=-I/usr/local/Cellar/glew/1.11.0/include -I/usr/local/Cellar/glfw3/3.1/include
+INCLUDE=-I/usr/local/include -I/opt/X11/include
 
 LDFLAGS=-framework OpenGL
-LGFLAGS+=-L/usr/local/Cellar/glew/1.11.0/lib -L/usr/local/Cellar/glfw3/3.1/lib
-LDFLAGS+=-lglew -lglfw3
+LDFLAGS+=-lglfw3 -lglew
 
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
